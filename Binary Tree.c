@@ -426,3 +426,152 @@ int main()
     printf("\nDiameter of Binary Tree:%d",Diameter(root));
 }
 
+//*****ITERATIVE********
+
+
+
+//Iterative insert
+Treenode* insert(Treenode*root,int val)
+{
+    if(!root)
+    {
+        Treenode* node=(Treenode*)malloc(sizeof(Treenode));
+        node->data=val;
+        node->left=NULL;
+        node->right=NULL;
+        return node;
+    }
+    Treenode* itr=root;
+    while(1)
+    {
+        if(val<itr->data)
+        {
+            if(itr->left)
+            {
+                itr=itr->left;
+            }
+            else
+            {
+                Treenode*temp=(Treenode*)malloc(sizeof(Treenode));
+                temp->data=val;
+                temp->left=NULL;
+                temp->right=NULL;
+                itr->left=temp;
+                break;
+            }
+        }
+        else if(val>itr->data)
+        {
+            if(itr->right)
+            {
+                itr=itr->right;
+            }
+            else
+            {
+                Treenode*temp=(Treenode*)malloc(sizeof(Treenode));
+                temp->data=val;
+                temp->left=NULL;
+                temp->right=NULL;
+                itr->right=temp;
+                break;
+            }
+        }
+    }
+    return root;
+}
+int count(Treenode*root)
+{
+    if(!root)
+    {
+        return 0;
+    }
+    return count(root->left)+count(root->right)+1;
+}
+//Iterative Preorder
+void preorder(Treenode*root)
+{
+    int n=count(root);
+    int *arr=(int*)malloc(n*sizeof(int));
+    int top=-1;
+    Treenode* temp=root;
+    if(temp)
+    {
+        arr[++top]=temp;
+    }
+    while(top>=0)
+    {
+        temp=arr[top--];
+        printf("%d ",temp->data);
+        if(temp->right)
+        {
+            arr[++top]=temp->right;
+        }
+        if(temp->left)
+        {
+            arr[++top]=temp->left;
+        }
+    }
+}
+//Iterative Inorder Traversal
+void inorder(Treenode*root)
+{
+    int n=count(root);
+    int *arr=(int*)malloc(n*sizeof(int));
+    int top=-1;
+    Treenode* temp=root;
+    while(1)
+    {
+        while(temp)
+        {
+            arr[++top]=temp;
+            temp=temp->left;
+        }
+        if(top>=0)
+        {
+            temp=arr[top--];
+            printf("%d ",temp->data);
+            temp=temp->right;
+        }
+        else
+        {
+            break;
+        }
+    }
+    free(arr);
+}
+//PostOrder iterative
+void postorder(Treenode* root) {
+    if (root == NULL) {
+        return;
+    }
+
+    int n = count(root);
+    int *arr1 = (int*)malloc(n * sizeof(int));
+    int *arr2 = (int*)malloc(n * sizeof(int));
+    int top1 = -1;
+    int top2 = -1;
+
+    Treenode* temp = root;
+    arr1[++top1] = (int)temp;
+
+    while (top1 >= 0) {
+        temp = (Treenode*)arr1[top1--];
+        if (temp) {
+            arr2[++top2] = (int)temp;
+            if (temp->left) {
+                arr1[++top1] = (int)temp->left;
+            }
+            if (temp->right) {
+                arr1[++top1] = (int)temp->right;
+            }
+        }
+    }
+
+    while (top2 >= 0) {
+        temp = (Treenode*)arr2[top2--];
+        printf("%d ", temp->data);
+    }
+
+    free(arr1);
+    free(arr2);
+}
